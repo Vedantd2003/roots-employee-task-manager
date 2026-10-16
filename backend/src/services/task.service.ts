@@ -4,7 +4,7 @@ import Employee from '../models/Employee';
 import { AppError } from '../middleware/errorHandler';
 import { isOverdue } from '../utils/overdue';
 import { CreateTaskInput, UpdateTaskInput } from '../validators/task.validator';
-import { Parser } from 'json2csv';
+// No external CSV library — using inline serializer to avoid @types issues
 
 export interface TaskQuery {
   page?: number;
@@ -370,6 +370,15 @@ export async function exportCsv(query: TaskQuery): Promise<string> {
     'overdue',
   ];
 
-  const parser = new Parser({ fields });
-  return parser.parse(rows);
+  const escape = (v: unknown): string => {
+    const s = v == null ? '' : String(v);
+    return s.includes(',') || s.includes('"') || s.includes('\n')
+      ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+
+  const header = fields.join(',');
+  const lines = rows.map(row =>
+    fields.map(f => escape((row as Record<string, unknown>)[f])).join(',')
+  );
+  return [header, ...lines].join('\r\n');
 }
