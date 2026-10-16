@@ -251,8 +251,8 @@ Frontend (Static Site):
 
 ## Live URLs
 
-- **Frontend**: *(set after deployment)*
-- **Backend**: *(set after deployment)*
+- **Frontend**: https://roots-frontend-6ibf.onrender.com
+- **Backend**: https://roots-backend-vz1g.onrender.com
 - **GitHub**: https://github.com/Vedantd2003/roots-employee-task-manager
 
 ---
